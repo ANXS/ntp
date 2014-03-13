@@ -3,6 +3,10 @@
 Ansible role which installs and configures ntp.
 
 
+#### Requirements & Dependencies
+- Tested on Ansible 1.4 or higher.
+
+
 #### Variables
 
 ```yaml
@@ -30,4 +34,4 @@ Licensed under the MIT License. See the LICENSE file for details.
 
 #### Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/ansibles/timezone/issues)!
+Are [welcome](https://github.com/ansibles/ntp/issues)!
