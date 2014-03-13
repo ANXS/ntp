@@ -1,0 +1,15 @@
+# file: xxx/meta/main.yml
+
+galaxy_info:
+  author: pjan vandaele
+  description: install and configure ntp
+  min_ansible_version: 1.3
+  license: MIT
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  categories:
+  - system
+
+dependencies: []
