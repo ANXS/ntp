@@ -4,7 +4,7 @@ Ansible role which installs and configures ntp.
 
 
 #### Requirements & Dependencies
-- Tested on Ansible 1.4 or higher.
+- Tested on Ansible 1.3 or higher.
 
 
 #### Variables
