@@ -1,4 +1,4 @@
-## Ansibles - timezone [![Build Status](https://travis-ci.org/Ansibles/timezone.png)](https://travis-ci.org/Ansibles/timezone)
+## Ansibles - ntp [![Build Status](https://travis-ci.org/Ansibles/ntp.png)](https://travis-ci.org/Ansibles/ntp)
 
 Ansible role which installs and configures ntp.
 
