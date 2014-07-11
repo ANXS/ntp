@@ -11,7 +11,7 @@ filegen clockstats file clockstats type day enable
 
 # Specification of one or more NTP servers
 {% for ntp_server in ntp_servers %}
-{{ntp_server}}
+server {{ntp_server}}
 {% endfor %}
 
 # Use Ubuntu's ntp server as a fallback.
