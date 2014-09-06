@@ -1,4 +1,4 @@
-## Ansibles - ntp [![Build Status](https://travis-ci.org/Ansibles/ntp.png)](https://travis-ci.org/Ansibles/ntp)
+## ANXS - ntp [![Build Status](https://travis-ci.org/ANXS/ntp.png)](https://travis-ci.org/ANXS/ntp)
 
 Ansible role which installs and configures ntp.
 
@@ -34,4 +34,4 @@ Licensed under the MIT License. See the LICENSE file for details.
 
 #### Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/ansibles/ntp/issues)!
+Are [welcome](https://github.com/ANXS/ntp/issues)!
