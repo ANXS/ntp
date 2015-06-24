@@ -4,3 +4,6 @@
   service:
     name: ntp
     state: restarted
+
+- name: reload ntp apparmor
+  command: apparmor_parser -r /etc/apparmor.d/usr.sbin.ntpd
