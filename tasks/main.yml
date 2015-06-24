@@ -8,6 +8,23 @@
     - ntp
     - ntpdate
 
+- name: ntp | Check for apparmor
+  command: "dpkg -s apparmor"
+  ignore_errors: True
+  register: apparmor_check
+  changed_when: False
+
+- name: ntp | Update apparmor for leapseconds
+  lineinfile:
+    dest: "/etc/apparmor.d/usr.sbin.ntpd"
+    line: "  /etc/ntp.leapseconds r,"
+    regexp: ".+ntp.leapseconds.+"
+    insertafter: ".+ntp.conf.+"
+  when: apparmor_check.rc == 0
+  notify:
+    - reload ntp apparmor
+    - restart ntp
+
 - name: ntp | Fetch leapseconds file
   get_url:
     url: "{{ntp_leapurl}}"
@@ -16,16 +33,6 @@
     group: "root"
     mode: "0660"
   notify:
-    - restart ntp
-
-- name: ntp | Update apparmor for leapseconds
-  lineinfile:
-    dest: "/etc/apparmor.d/usr.sbin.ntpd"
-    line: "  /etc/ntp.leapseconds r,"
-    regexp: ".+ntp.leapseconds.+"
-    insertafter: ".+ntp.conf.+"
-  notify:
-    - reload ntp apparmor
     - restart ntp
 
 - name: ntp | Configure ntp (/etc/ntp.conf)
@@ -45,7 +52,7 @@
 - name: ntp | Generate auto-ntpdate cron
   cron:
     name: "ANXS auto-ntpdate"
-    hour: "*/{{auto_ntpdate_every}}"
+    hour: "*/{{auto_ntpdate_hour}}"
     minute: "0"
     state: present
     job: "/usr/local/sbin/auto-ntpdate"
