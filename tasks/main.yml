@@ -47,25 +47,25 @@
     src: auto-ntpdate.sh
     dest: /usr/local/sbin/auto-ntpdate
     mode: 0770
-  when: auto_ntpdate
+  when: ntp_auto_update
 
 - name: ntp | Generate auto-ntpdate cron
   cron:
     name: "ANXS auto-ntpdate"
-    hour: "*/{{auto_ntpdate_hour}}"
+    hour: "*/{{ntp_auto_update_hour}}"
     minute: "0"
     state: present
     job: "/usr/local/sbin/auto-ntpdate"
-  when: auto_ntpdate
+  when: ntp_auto_update
 
 - name: ntp | Remove auto-ntpdate script
   cron:
     name: "ANXS auto-ntpdate"
     state: absent
-  when: not auto_ntpdate
+  when: not ntp_auto_update
 
 - name: ntp | Remove auto-ntpdate files
   file:
     path: /usr/local/sbin/auto-ntpdate
     state: absent
-  when: not auto_ntpdate
+  when: not ntp_auto_update

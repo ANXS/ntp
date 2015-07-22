@@ -17,5 +17,5 @@ ntp_restricts:
   - "restrict -6 default kod notrap nomodify nopeer noquery"
   - "restrict -6 ::1 nomodify"
 
-auto_ntpdate: no
-auto_ntpdate_hour: 12
+ntp_auto_update: no
+ntp_auto_update_hour: 12
