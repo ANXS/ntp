@@ -14,13 +14,18 @@
   register: apparmor_check
   changed_when: False
 
+- name: ntp | Check for ntp apparmor configuration
+  stat:
+    path: "/etc/apparmor.d/usr.sbin.ntpd"
+  register: apparmor_conf
+
 - name: ntp | Update apparmor for leapseconds
   lineinfile:
     dest: "/etc/apparmor.d/usr.sbin.ntpd"
     line: "  /etc/ntp.leapseconds r,"
     regexp: ".+ntp.leapseconds.+"
     insertafter: ".+ntp.conf.+"
-  when: apparmor_check.rc == 0
+  when: apparmor_check.rc == 0 and apparmor_conf.stat.exists
   notify:
     - reload ntp apparmor
     - restart ntp
