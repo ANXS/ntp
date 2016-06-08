@@ -19,8 +19,8 @@ Ansible role which installs and configures ntp.
 - "2.pool.ntp.org"
 - "3.pool.ntp.org"
 ```
-* `auto_ntpdate` controls whether or not to periodically run `ntpdate`. Helpful with some troublesome virtual machines. It defaults to `no`.
-* `auto_ntpdate_hour` determines which hour of the day to periodically run `ntpdate`. Defaults to `12`.
+* `ntp_auto_update` controls whether or not to periodically run `ntpdate`. Helpful with some troublesome virtual machines. It defaults to `no`.
+* `ntp_auto_update_hour` determines which hour of the day to periodically run `ntpdate`. Defaults to `12`.
 * `ntp_leapfile` defaults to `/etc/ntp.leapseconds`
 * `ntp_leapurl` is the URL to retrieve the leap seconds file from. It defaults to `http://www.ietf.org/timezones/data/leap-seconds.list`.
 * `ntp_restricts` defaults to the following
