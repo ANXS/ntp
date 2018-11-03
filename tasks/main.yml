@@ -2,11 +2,8 @@
 
 - name: ntp | Make sure the dependencies are installed
   apt:
-    pkg: "{{item}}"
+    pkg: "{{ntp_deps}}"
     state: present
-  with_items:
-    - ntp
-    - ntpdate
 
 - name: ntp | Check for apparmor
   command: "dpkg -s apparmor"
