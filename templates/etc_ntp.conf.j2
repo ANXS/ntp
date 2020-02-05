@@ -9,11 +9,22 @@ filegen loopstats file loopstats type day enable
 filegen peerstats file peerstats type day enable
 filegen clockstats file clockstats type day enable
 
+{% if ntp_servers|length > 0 %}
 # Specification of one or more NTP servers
 {% for ntp_server in ntp_servers %}
-server {{ntp_server}}
+{% if ntp_pool %}
+pool {{ntp_server}}{% if ntp_iburst %} iburst{% endif %}
+{% else %}
+server {{ntp_server}}{% if ntp_iburst %} iburst{% endif %}
+{% endif %}
 {% endfor %}
+{% endif %}
 
+{% if ntp_peers|length > 0 %}
+{% for ntp_peer in ntp_peers %}
+peer {{ntp_peer}}{% if ntp_iburst %} iburst{% endif %}
+{% endfor %}
+{% endif %}
 # Use Ubuntu's ntp server as a fallback.
 server ntp.ubuntu.com
 
@@ -21,3 +32,7 @@ server ntp.ubuntu.com
 {% for restrict in ntp_restricts %}
 {{restrict}}
 {% endfor %}
+
+{% if not ntp_monitor %}
+disable monitor
+{% endif %}

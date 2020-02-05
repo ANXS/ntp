@@ -1,22 +1,28 @@
-# file: ntp/tasks/main.yml
-
-- name: ntp | Make sure the dependencies are installed
+---
+- name: "Make sure the dependencies are installed"
   apt:
     pkg: "{{ntp_deps}}"
     state: present
 
-- name: ntp | Check for apparmor
+- name: "Check for apparmor"
   command: "dpkg -s apparmor"
   ignore_errors: True
   register: apparmor_check
   changed_when: False
 
-- name: ntp | Check for ntp apparmor configuration
+- name: "Ignore NTP DHCP Configuration"
+  file:
+    path: "/var/lib/ntp/ntp.conf.dhcp"
+    state: "absent"
+  when: not ntp_dhcp
+  notify: restart ntp
+
+- name: "Check for ntp apparmor configuration"
   stat:
     path: "/etc/apparmor.d/usr.sbin.ntpd"
   register: apparmor_conf
 
-- name: ntp | Update apparmor for leapseconds
+- name: "Update apparmor for leapseconds"
   lineinfile:
     dest: "/etc/apparmor.d/usr.sbin.ntpd"
     line: "  /etc/ntp.leapseconds r,"
@@ -27,31 +33,35 @@
     - reload ntp apparmor
     - restart ntp
 
-- name: ntp | Fetch leapseconds file
+- name: "Fetch leapseconds file"
   get_url:
     url: "{{ntp_leapurl}}"
     dest: "/etc/ntp.leapseconds"
-    owner: "root"
-    group: "root"
+    owner: "{{ntp_user}}"
+    group: "{{ntp_group}}"
     mode: "0660"
   notify:
     - restart ntp
 
-- name: ntp | Configure ntp (/etc/ntp.conf)
+- name: "Configure ntp (/etc/ntp.conf)"
   template:
+    onwer: 
     src: etc_ntp.conf.j2
     dest: /etc/ntp.conf
+    owner: "{{ntp_user}}"
+    group: "{{ntp_group}}"
+    mode: "0660"
   notify:
     - restart ntp
 
-- name: ntp | Copy auto-ntpdate script
+- name: "Copy auto-ntpdate script"
   copy:
     src: auto-ntpdate.sh
     dest: /usr/local/sbin/auto-ntpdate
     mode: 0770
   when: ntp_auto_update
 
-- name: ntp | Generate auto-ntpdate cron
+- name: "Generate auto-ntpdate cron"
   cron:
     name: "ANXS auto-ntpdate"
     hour: "*/{{ntp_auto_update_hour}}"
@@ -60,13 +70,13 @@
     job: "/usr/local/sbin/auto-ntpdate"
   when: ntp_auto_update
 
-- name: ntp | Remove auto-ntpdate script
+- name: "Remove auto-ntpdate script"
   cron:
     name: "ANXS auto-ntpdate"
     state: absent
   when: not ntp_auto_update
 
-- name: ntp | Remove auto-ntpdate files
+- name: "Remove auto-ntpdate files"
   file:
     path: /usr/local/sbin/auto-ntpdate
     state: absent
