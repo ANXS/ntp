@@ -4,13 +4,16 @@ ntp_driftfile: "/var/lib/ntp/ntp.drift"
 ntp_statsdir: "/var/log/ntpstats/"
 ntp_leapfile: "/etc/ntp.leapseconds"
 ntp_leapurl: "http://www.ietf.org/timezones/data/leap-seconds.list"
-ntp_servers: ["0.pool.ntp.org", "1.pool.ntp.org", "2.pool.ntp.org", "3.pool.ntp.org"]
+ntp_servers:
+  - "0.pool.ntp.org"
+  - "1.pool.ntp.org"
+  - "2.pool.ntp.org"
+  - "3.pool.ntp.org"
 ntp_peers: []
 ntp_pool: false
 ntp_iburst: false
 ntp_user: "root"
 ntp_group: "root"
-
 
 ntp_restricts:
   - "restrict 0.pool.ntp.org nomodify notrap noquery"
@@ -25,3 +28,5 @@ ntp_restricts:
 ntp_auto_update: false
 ntp_auto_update_hour: 12
 ntp_dhcp: true
+ntp_monitor: false
+ntp_running: true

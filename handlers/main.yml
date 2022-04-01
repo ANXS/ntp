@@ -1,9 +1,9 @@
-# file: ntp/handlers/main.yml
-
+---
 - name: restart ntp
   service:
     name: ntp
     state: restarted
+  when: ntp_running
 
 - name: reload ntp apparmor
   command: apparmor_parser -r /etc/apparmor.d/usr.sbin.ntpd

@@ -4,11 +4,17 @@
     pkg: "{{ntp_deps}}"
     state: present
 
+- name: "Stop ntp if not running"
+  service:
+    name: "ntp"
+    state: "stopped"
+  when: not ntp_running
+
 - name: "Check for apparmor"
   command: "dpkg -s apparmor"
-  ignore_errors: True
+  ignore_errors: true
   register: apparmor_check
-  changed_when: False
+  changed_when: false
 
 - name: "Ignore NTP DHCP Configuration"
   file:
@@ -45,7 +51,6 @@
 
 - name: "Configure ntp (/etc/ntp.conf)"
   template:
-    onwer: 
     src: etc_ntp.conf.j2
     dest: /etc/ntp.conf
     owner: "{{ntp_user}}"
@@ -81,3 +86,9 @@
     path: /usr/local/sbin/auto-ntpdate
     state: absent
   when: not ntp_auto_update
+
+- name: "Stop ntp if not running"
+  service:
+    name: "ntp"
+    state: "stopped"
+  when: not ntp_running
