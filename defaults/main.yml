@@ -3,7 +3,7 @@ ntp_timezone: "UTC"
 ntp_driftfile: "/var/lib/ntp/ntp.drift"
 ntp_statsdir: "/var/log/ntpstats/"
 ntp_leapfile: "/etc/ntp.leapseconds"
-ntp_leapurl: "http://www.ietf.org/timezones/data/leap-seconds.list"
+ntp_leapurl: "ftp://ftp.boulder.nist.gov/pub/time/leap-seconds.list"
 ntp_servers:
   - "0.pool.ntp.org"
   - "1.pool.ntp.org"
