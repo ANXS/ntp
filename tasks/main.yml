@@ -38,6 +38,8 @@
   notify:
     - reload ntp apparmor
     - restart ntp
+  retries: 5
+  delay: 5
 
 - name: "Fetch leapseconds file"
   get_url:
