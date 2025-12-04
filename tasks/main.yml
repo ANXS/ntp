@@ -1,4 +1,16 @@
 ---
+- name: "Select vars file for distribution"
+  include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution | lower }}.yml"
+        - "defaults.yml"
+
+      paths:
+        - "{{ role_path }}/vars"
+
 - name: "Make sure the dependencies are installed"
   apt:
     pkg: "{{ntp_deps}}"

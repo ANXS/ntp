@@ -1,0 +1,4 @@
+---
+ntp_deps:
+  - "ntpsec"
+  - "ntpsec-ntpdate"
