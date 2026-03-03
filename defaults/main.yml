@@ -25,6 +25,9 @@ ntp_restricts:
   - "restrict -6 default kod notrap nomodify nopeer noquery"
   - "restrict -6 ::1 nomodify"
 
+ntp_service_name: "ntp"
+ntp_use_systemd_timer: false
+ntp_ntpdate_cmd: "/usr/sbin/ntpdate-debian"
 ntp_auto_update: false
 ntp_auto_update_hour: 12
 ntp_dhcp: true

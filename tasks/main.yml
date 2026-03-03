@@ -5,6 +5,7 @@
     params:
       files:
         - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml"
         - "{{ ansible_distribution | lower }}.yml"
         - "defaults.yml"
 
@@ -18,7 +19,7 @@
 
 - name: "Stop ntp if not running"
   service:
-    name: "ntp"
+    name: "{{ ntp_service_name }}"
     state: "stopped"
   when: not ntp_running
 
@@ -78,7 +79,7 @@
     src: auto-ntpdate.sh
     dest: /usr/local/sbin/auto-ntpdate
     mode: 0770
-  when: ntp_auto_update
+  when: ntp_auto_update and not ntp_use_systemd_timer
 
 - name: "Generate auto-ntpdate cron"
   cron:
@@ -87,22 +88,75 @@
     minute: "0"
     state: present
     job: "/usr/local/sbin/auto-ntpdate"
-  when: ntp_auto_update
+  when: ntp_auto_update and not ntp_use_systemd_timer
 
-- name: "Remove auto-ntpdate script"
+- name: "Remove auto-ntpdate cron"
   cron:
     name: "ANXS auto-ntpdate"
     state: absent
-  when: not ntp_auto_update
+  when: not ntp_auto_update and not ntp_use_systemd_timer
 
-- name: "Remove auto-ntpdate files"
+- name: "Remove auto-ntpdate script (cron)"
   file:
     path: /usr/local/sbin/auto-ntpdate
     state: absent
-  when: not ntp_auto_update
+  when: not ntp_auto_update and not ntp_use_systemd_timer
+
+- name: "Clean up legacy auto-ntpdate cron entry"
+  cron:
+    name: "ANXS auto-ntpdate"
+    state: absent
+  when: ntp_use_systemd_timer
+  ignore_errors: true
+
+- name: "Clean up legacy auto-ntpdate script"
+  file:
+    path: /usr/local/sbin/auto-ntpdate
+    state: absent
+  when: ntp_use_systemd_timer
+
+- name: "Deploy auto-ntpdate systemd service"
+  template:
+    src: auto-ntpdate.service.j2
+    dest: /etc/systemd/system/auto-ntpdate.service
+    owner: root
+    group: root
+    mode: "0644"
+  when: ntp_auto_update and ntp_use_systemd_timer
+  notify: reload systemd
+
+- name: "Deploy auto-ntpdate systemd timer"
+  template:
+    src: auto-ntpdate.timer.j2
+    dest: /etc/systemd/system/auto-ntpdate.timer
+    owner: root
+    group: root
+    mode: "0644"
+  when: ntp_auto_update and ntp_use_systemd_timer
+  notify:
+    - reload systemd
+    - enable auto-ntpdate timer
+
+- name: "Stop and disable auto-ntpdate timer"
+  systemd:
+    name: auto-ntpdate.timer
+    state: stopped
+    enabled: false
+  when: not ntp_auto_update and ntp_use_systemd_timer
+  ignore_errors: true
+
+- name: "Remove auto-ntpdate systemd units"
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/systemd/system/auto-ntpdate.service
+    - /etc/systemd/system/auto-ntpdate.timer
+  when: not ntp_auto_update and ntp_use_systemd_timer
+  notify: reload systemd
 
 - name: "Stop ntp if not running"
   service:
-    name: "ntp"
+    name: "{{ ntp_service_name }}"
     state: "stopped"
   when: not ntp_running
