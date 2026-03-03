@@ -1,0 +1,5 @@
+---
+ntp_deps:
+  - "ntp"
+  - "ntpdate"
+ntp_use_systemd_timer: true
