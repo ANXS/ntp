@@ -1,51 +1,37 @@
-## ANXS - ntp [![Build Status](https://travis-ci.org/ANXS/ntp.png)](https://travis-ci.org/ANXS/ntp)
+## [ANXS](https://github.com/ANXS) - ntp
 
-Ansible role which installs and configures ntp.
+[![CI Status](https://img.shields.io/github/actions/workflow/status/anxs/ntp/ci.yml)](https://github.com/ANXS/ntp/actions/workflows/ci.yml)
+[![Maintenance](https://img.shields.io/maintenance/yes/2026.svg)](https://github.com/ANXS/ntp)
+[![Ansible Role](https://img.shields.io/ansible/role/d/anxs/ntp)](https://galaxy.ansible.com/ui/standalone/roles/ANXS/ntp/)
+[![License](https://img.shields.io/github/license/ANXS/ntp)](https://github.com/ANXS/ntp/blob/master/LICENSE)
 
+Ansible role for installing and configuring NTP time synchronization. Manages the NTP daemon, server/pool configuration, access restrictions, leap seconds file, and optional periodic ntpdate sync via cron or systemd timer. Supports both classic ntp and ntpsec (Debian 13+).
 
-#### Requirements & Dependencies
-- Tested on Ansible 2.8 or higher.
+## Requirements & Dependencies
 
+* Ansible 2.12 or higher.
+* Ubuntu 20.04+ or Debian 11+.
 
-#### Variables
+## Variables
 
-* `ntp_timezone` defaults to `UTC`
-* `ntp_driftfile` defaults to `/var/lib/ntp/ntp.drift`
-* `ntp_statsdir` defaults to `/var/log/ntpstats/`
-* `ntp_servers` defaults to the following
-```yaml
-- "0.pool.ntp.org"
-- "1.pool.ntp.org"
-- "2.pool.ntp.org"
-- "3.pool.ntp.org"
-```
-* `ntp_auto_update` controls whether or not to periodically run `ntpdate`. Helpful with some troublesome virtual machines. It defaults to `no`.
-* `ntp_auto_update_hour` determines which hour of the day to periodically run `ntpdate`. Defaults to `12`.
-* `ntp_leapfile` defaults to `/etc/ntp.leapseconds`
-* `ntp_leapurl` is the URL to retrieve the leap seconds file from. It defaults to `http://www.ietf.org/timezones/data/leap-seconds.list`.
-* `ntp_restricts` defaults to the following
-```yaml
-- "restrict 0.pool.ntp.org nomodify notrap noquery"
-- "restrict 1.pool.ntp.org nomodify notrap noquery"
-- "restrict 2.pool.ntp.org nomodify notrap noquery"
-- "restrict 3.pool.ntp.org nomodify notrap noquery"
-- "restrict default kod notrap nomodify nopeer noquery"
-- "restrict 127.0.0.1 nomodify"
-- "restrict -6 default kod notrap nomodify nopeer noquery"
-- "restrict -6 ::1 nomodify"
-```
+A partial listing of high-impact variables. See `defaults/main.yml` for the full set.
 
-#### Testing
-This project comes with a VagrantFile, this is a fast and easy way to test changes to the role, fire it up with `vagrant up`
+* `ntp_servers` (defaults to `0-3.pool.ntp.org`) controls the list of NTP servers to sync against.
+* `ntp_auto_update` (defaults to `false`) enable periodic ntpdate sync as a forcing function.
+  * `ntp_use_systemd_timer` (defaults to `false` unless on Ubuntu noble) use a systemd timer instead of cron.
+  * `ntp_auto_update_hour` (defaults to `12`) to change the hour interval for periodic sync.
+* `ntp_timezone` (defaults to `UTC`) for the system timezone.
 
-See [vagrant docs](https://docs.vagrantup.com/v2/) for getting setup with vagrant
+## Testing
 
+Tests use [Molecule](https://github.com/ansible/molecule) with Docker and [Testinfra](https://testinfra.readthedocs.io/). Run the full suite with `make test`, or target a specific platform (e.g. `make test-ubuntu2404`).
 
-#### License
+The test suite verifies package installation (ntp/ntpsec), config file permissions, server and restriction directives, driftfile presence, leap seconds file fetch, and NTP service status. Tests run across all supported Linux distributions.
 
-Licensed under the MIT License. See the LICENSE file for details.
+## Note on AI Usage
 
+This project has been developed with AI assistance. Contributions making use of AI generated content are welcome, however they _must_ be human reviewed prior to submission as pull requests, or issues. All contributors must be able to fully explain and defend any AI generated code, documentation, issues, or tests they submit. Contributions making use of AI must have this explicitly declared in the pull request or issue. This also applies to utilization of AI for reviewing of pull requests.
 
-#### Feedback, bug-reports, requests, ...
+## Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/ANXS/ntp/issues)!
+Are always [welcome](https://github.com/ANXS/ntp/issues)!

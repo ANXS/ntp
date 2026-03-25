@@ -31,5 +31,4 @@ ntp_ntpdate_cmd: "/usr/sbin/ntpdate-debian"
 ntp_auto_update: false
 ntp_auto_update_hour: 12
 ntp_dhcp: true
-ntp_monitor: false
 ntp_running: true

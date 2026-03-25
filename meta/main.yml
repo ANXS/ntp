@@ -1,16 +1,26 @@
-# file: xxx/meta/main.yml
-
+---
 galaxy_info:
-  author: pjan vandaele
-  company: ANXS
-  description: install and configure ntp
-  min_ansible_version: 2.3
-  license: MIT
+  role_name: "ntp"
+  namespace: "anxs"
+  author: "ANXS Crew"
+  company: "ANXS"
+  description: "Install and configure NTP time synchronization"
+  min_ansible_version: "2.12"
+  license: "MIT"
   platforms:
-  - name: Ubuntu
-    versions:
-    - all
-  categories:
-  - system
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+        - noble
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+  galaxy_tags:
+    - system
+    - networking
+    - ntp
+    - time
 
 dependencies: []
