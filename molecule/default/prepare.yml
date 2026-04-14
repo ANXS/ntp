@@ -1,0 +1,15 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: "Early apt-get update"
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: "Install cron (needed for ansible.builtin.cron)"
+      ansible.builtin.apt:
+        name: cron
+        state: present

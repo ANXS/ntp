@@ -1,9 +1,21 @@
-# file: ntp/handlers/main.yml
-
-- name: restart ntp
-  service:
-    name: ntp
+---
+- name: "Restart ntp"
+  ansible.builtin.service:
+    name: "{{ ntp_service_name }}"
     state: restarted
+  when: ntp_running
 
-- name: reload ntp apparmor
-  command: apparmor_parser -r /etc/apparmor.d/usr.sbin.ntpd
+- name: "Reload ntp apparmor"
+  ansible.builtin.command: apparmor_parser -r /etc/apparmor.d/usr.sbin.ntpd
+  changed_when: true
+  when: apparmor_check.rc == 0 and apparmor_conf.stat.exists
+
+- name: "Reload systemd"
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: "Enable auto-ntpdate timer"
+  ansible.builtin.systemd:
+    name: auto-ntpdate.timer
+    state: started
+    enabled: true

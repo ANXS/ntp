@@ -1,0 +1,8 @@
+[Unit]
+Description=ANXS auto NTP date sync
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'systemctl stop {{ ntp_service_name }} && {{ ntp_ntpdate_cmd }} {{ ntp_servers | first }} && systemctl start {{ ntp_service_name }}'

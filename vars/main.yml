@@ -1,4 +1,0 @@
----
-ntp_deps:
-  - ntp
-  - ntpdate

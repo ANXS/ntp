@@ -1,0 +1,7 @@
+---
+ntp_deps:
+  - "ntpsec"
+  - "ntpsec-ntpdate"
+ntp_service_name: "ntpsec"
+ntp_use_systemd_timer: true
+ntp_ntpdate_cmd: "/usr/sbin/ntpdate"
