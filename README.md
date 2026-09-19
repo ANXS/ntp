@@ -10,7 +10,7 @@ Ansible role for installing and configuring NTP time synchronization. Manages th
 ## Requirements & Dependencies
 
 * Ansible 2.12 or higher.
-* Ubuntu 20.04+ or Debian 11+.
+* Ubuntu 20.04+ or Debian 12+.
 
 ## Variables
 

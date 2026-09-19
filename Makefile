@@ -1,4 +1,4 @@
-.PHONY: lint test test-debian11 test-debian12 test-ubuntu2004 test-ubuntu2204 test-ubuntu2404 test-all clean distclean
+.PHONY: lint test test-debian12 test-debian13 test-ubuntu2004 test-ubuntu2204 test-ubuntu2404 test-all clean distclean
 
 VENV := .venv
 BIN := $(VENV)/bin
@@ -16,9 +16,9 @@ lint: $(VENV)
 
 test: lint test-all
 
-test-debian11: $(VENV)
-	MOLECULE_OS=debian MOLECULE_VERSION=11 \
-		MOLECULE_IMAGE=geerlingguy/docker-debian11-ansible:latest \
+test-debian13: $(VENV)
+	MOLECULE_OS=debian MOLECULE_VERSION=13 \
+		MOLECULE_IMAGE=geerlingguy/docker-debian13-ansible:latest \
 		$(BIN)/molecule test
 
 test-debian12: $(VENV)
@@ -41,7 +41,7 @@ test-ubuntu2404: $(VENV)
 		MOLECULE_IMAGE=geerlingguy/docker-ubuntu2404-ansible:latest \
 		$(BIN)/molecule test
 
-test-all: test-debian11 test-debian12 test-ubuntu2004 test-ubuntu2204 test-ubuntu2404
+test-all: test-debian12 test-debian13 test-ubuntu2004 test-ubuntu2204 test-ubuntu2404
 
 clean:
 	$(BIN)/molecule destroy 2>/dev/null || true

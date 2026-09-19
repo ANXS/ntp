@@ -29,6 +29,11 @@
   register: apparmor_check
   changed_when: false
 
+- name: "Check for kernel apparmor support"
+  ansible.builtin.stat:
+    path: "/sys/kernel/security/apparmor"
+  register: apparmor_kernel
+
 - name: "Ignore NTP DHCP Configuration"
   ansible.builtin.file:
     path: "/var/lib/ntp/ntp.conf.dhcp"
@@ -48,6 +53,7 @@
     regexp: ".+ntp.leapseconds.+"
     insertafter: ".+ntp.conf.+"
   when: apparmor_check.rc == 0 and apparmor_conf.stat.exists
+        and apparmor_kernel.stat.exists
   notify:
     - Reload ntp apparmor
     - Restart ntp
