@@ -1,5 +1,5 @@
 ---
-ntp_timezone: "UTC"
+ntp_timezone: null
 ntp_driftfile: "/var/lib/ntp/ntp.drift"
 ntp_statsdir: "/var/log/ntpstats/"
 ntp_leapfile: "/etc/ntp.leapseconds"

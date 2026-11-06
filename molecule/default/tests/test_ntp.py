@@ -1,6 +1,14 @@
 """Testinfra tests for anxs-ntp role."""
 
 
+def test_timezone_configured(host):
+    """Verify the configured timezone is applied."""
+    timezone = host.check_output(
+        "timedatectl show --property=Timezone --value"
+    )
+    assert timezone == "Europe/London"
+
+
 def test_ntp_package_installed(host):
     """Verify NTP package is installed."""
     # Debian 13+ uses ntpsec, others use ntp

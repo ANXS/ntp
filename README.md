@@ -10,6 +10,7 @@ Ansible role for installing and configuring NTP time synchronization. Manages th
 ## Requirements & Dependencies
 
 * Ansible 2.12 or higher.
+* The `community.general` collection.
 * Ubuntu 20.04+ or Debian 12+.
 
 ## Variables
@@ -20,7 +21,7 @@ A partial listing of high-impact variables. See `defaults/main.yml` for the full
 * `ntp_auto_update` (defaults to `false`) enable periodic ntpdate sync as a forcing function.
   * `ntp_use_systemd_timer` (defaults to `false` unless on Ubuntu noble) use a systemd timer instead of cron.
   * `ntp_auto_update_hour` (defaults to `12`) to change the hour interval for periodic sync.
-* `ntp_timezone` (defaults to `UTC`) for the system timezone.
+* `ntp_timezone` (defaults to `null`) optionally manages the system timezone when set to an IANA timezone name such as `Europe/London`.
 
 ## Testing
 

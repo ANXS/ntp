@@ -12,6 +12,23 @@
       paths:
         - "{{ role_path }}/vars"
 
+- name: "Validate timezone configuration"
+  ansible.builtin.assert:
+    that:
+      - ntp_timezone is none or (ntp_timezone is string and ntp_timezone | length > 0)
+    fail_msg: "ntp_timezone must be null or a non-empty timezone name"
+
+- name: "Install timezone data"
+  ansible.builtin.apt:
+    name: tzdata
+    state: present
+  when: ntp_timezone is not none
+
+- name: "Configure system timezone"
+  community.general.timezone:
+    name: "{{ ntp_timezone }}"
+  when: ntp_timezone is not none
+
 - name: "Make sure the dependencies are installed"
   ansible.builtin.apt:
     pkg: "{{ ntp_deps }}"
